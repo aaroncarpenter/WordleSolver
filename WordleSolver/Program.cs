@@ -169,10 +169,10 @@ namespace WordleSolver
                                 Console.WriteLine("   " + matchedword);
                                 counter++;
 
-                                if (counter > 40)
+                                if (counter > 20)
                                     break;
                             }
-                            Console.WriteLine($"Showing {(matchedExtendedWords.Count < 40 ? matchedExtendedWords.Count : 40)} of {matchedExtendedWords.Count} extended words.");
+                            Console.WriteLine($"Showing {(matchedExtendedWords.Count < 20 ? matchedExtendedWords.Count : 20)} of {matchedExtendedWords.Count} extended words.");
                         }
                         break;
                 }
