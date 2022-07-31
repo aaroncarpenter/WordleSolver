@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace WordleSolver
@@ -11,8 +12,9 @@ namespace WordleSolver
         static void Main(string[] args)
         {
             
-            string[] words = File.ReadAllLines(System.Environment.CurrentDirectory + "/valid_solutions.csv");
+            string[] previousSolutionWords = File.ReadAllLines(System.Environment.CurrentDirectory + "/previous_solutions.csv");
             string[] extendedwords = File.ReadAllLines(System.Environment.CurrentDirectory + "/valid_guesses.csv");
+            string[] words = File.ReadAllLines(System.Environment.CurrentDirectory + "/valid_solutions.csv");
             List<string> excludedLetters = new List<string>();
 
             string response = "";
@@ -21,6 +23,7 @@ namespace WordleSolver
             {
                 List<string> matchedWords = new List<string>();
                 List<string> matchedExtendedWords = new List<string>();
+                List<string> matchedPreviousSolutionWords = new List<string>();
 
                 string letter = "";
                 string letter_position = "";
@@ -119,12 +122,28 @@ namespace WordleSolver
 
                                     if (!excludeWord)
                                     {
-                                        matchedWords.Add(word);
+                                        // if current word isnt in the previous solution list.
+                                        if (!previousSolutionWords.Any(word.ToUpper().Contains))
+                                        {
+                                            matchedWords.Add(word);
+                                        }
+                                        else
+                                        {
+                                            matchedPreviousSolutionWords.Add(word);
+                                        }
                                     }
                                 }
                                 else
                                 {
-                                    matchedWords.Add(word);
+                                    // if current word isnt in the previous solution list.
+                                    if (!previousSolutionWords.Any(word.ToUpper().Contains))
+                                    {
+                                        matchedWords.Add(word);
+                                    }
+                                    else
+                                    {
+                                        matchedPreviousSolutionWords.Add(word);
+                                    }
                                 }
                             }
                         }
@@ -173,6 +192,17 @@ namespace WordleSolver
                                     break;
                             }
                             Console.WriteLine($"Showing {(matchedExtendedWords.Count < 20 ? matchedExtendedWords.Count : 20)} of {matchedExtendedWords.Count} extended words.");
+                            Console.WriteLine("");
+                        }
+                        
+                        // SHow matched previous solution words
+                        if (matchedPreviousSolutionWords.Count > 0)
+                        {
+                            Console.WriteLine("Matched Previous Solution Words");
+                            foreach (string matchedword in matchedPreviousSolutionWords)
+                            {
+                                Console.WriteLine("   " + matchedword);
+                            }
                         }
                         break;
                 }
